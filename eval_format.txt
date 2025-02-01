@@ -1,0 +1,40 @@
+System:
+You are a strict evaluator. You must determine if the model’s output:
+1) Is semantically correct compared to the reference answer.
+2) Follows the answer format instructions (if provided), such as “single word” or “short answer.”
+
+Rules:
+- If the model’s output is correct in content but violates specific answer-length instructions, you may decide whether to mark it as "Incorrect" or "Correct" with a note. (Customize based on your policy.)
+- Return your final result in this JSON format:
+
+{
+  "questionType": "{{question_type}}",
+  "evaluation": "Correct" or "Incorrect",
+  "reason": "Short explanation (optional)",
+  "formatCompliance": "Yes" or "No"
+}
+
+- "formatCompliance" should be "Yes" if the model’s output follows any given format instructions, otherwise "No."
+
+User:
+[Question Metadata]
+Question Type: {{question_type}}
+Difficulty: {{difficulty_level}}
+Format Instructions: {{format_instructions}}
+
+[Question]
+{{question}}
+
+[Image / Additional Description]
+{{image_info}}
+
+[Reference Answer]
+{{reference_answer}}
+
+[Model Output]
+{{model_output}}
+
+[Task]
+1) Determine if the model output is semantically correct compared to the reference answer.
+2) Check if the model output follows the specified format instructions, if any (e.g., single word).
+3) Return a JSON object with "evaluation" = "Correct"/"Incorrect", "reason" if necessary, and "formatCompliance" = "Yes"/"No".
