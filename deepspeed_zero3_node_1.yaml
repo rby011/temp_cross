@@ -1,0 +1,22 @@
+compute_environment: LOCAL_MACHINE
+debug: false
+deepspeed_config:
+  deepspeed_multinode_launcher: standard
+  offload_optimizer_device: none
+  offload_param_device: none
+  zero3_init_flag: true
+  zero3_save_16bit_model: true
+  zero_stage: 3
+distributed_type: DEEPSPEED
+downcast_bf16: 'no'
+machine_rank: 1               # Node B는 rank=1
+main_training_function: main
+mixed_precision: bf16         # bf16 혼합정밀도
+num_machines: 2               # 전체 노드는 2대
+num_processes: 2              # 이 노드에서 사용할 프로세스(=GPU) 2개
+rdzv_backend: static
+same_network: true
+tpu_env: []
+tpu_use_cluster: false
+tpu_use_sudo: false
+use_cpu: false
