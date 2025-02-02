@@ -1,0 +1,136 @@
+# guild.yml
+
+sft_vlm:
+  description: "Full FT for Llama Vision-Instruct (approx 11B) using Accelerate + TRL"
+  operations:
+    train:
+      # We'll call 'accelerate' as the command, with 'launch sft_vlm.py' as args
+      command: accelerate
+      args:
+        - launch
+        - sft_vlm.py
+
+      # We want to pass each Guild 'flag' as '--flag_name flag_value'
+      # So if we do: guild run sft_vlm:train per_device_train_batch_size=4
+      # -> translates to: accelerate launch sft_vlm.py --per_device_train_batch_size 4
+      flag-opts:
+        template: --${flag_name} ${flag_value}
+
+      flags:
+        # ScriptArguments (dataset)
+        dataset_name:
+          default: "MyVisionInstructionDataset"
+          type: str
+        dataset_config:
+          default: null
+          type: str
+        dataset_train_split:
+          default: "train"
+          type: str
+        dataset_test_split:
+          default: "validation"
+          type: str
+        skip_prepare_dataset:
+          default: true
+          type: bool
+        max_samples:
+          default: null
+          type: int
+        template_name:
+          default: null
+          type: str
+
+        # ModelConfig
+        model_name_or_path:
+          default: "meta-llama/Llama-3.2-11B-Vision-Instruct"
+          type: str
+        trust_remote_code:
+          default: true
+          type: bool
+        torch_dtype:
+          default: "bfloat16"
+          type: str
+        model_revision:
+          default: "main"
+          type: str
+        attn_implementation:
+          default: "flash"
+          type: str
+        load_in_4bit:
+          default: false
+          type: bool
+        load_in_8bit:
+          default: false
+          type: bool
+        # peft_type intentionally omitted => Full FT
+
+        # SFTConfig = TrainingArguments
+        output_dir:
+          default: "sft-llama3.2-11b-full"
+          type: str
+        overwrite_output_dir:
+          default: false
+          type: bool
+        per_device_train_batch_size:
+          default: 4
+          type: int
+        gradient_accumulation_steps:
+          default: 4
+          type: int
+        num_train_epochs:
+          default: 3
+          type: int
+        learning_rate:
+          default: 5e-5
+          type: float
+        weight_decay:
+          default: 0.01
+          type: float
+        lr_scheduler_type:
+          default: "cosine"
+          type: str
+        warmup_steps:
+          default: 1000
+          type: int
+        bf16:
+          default: true
+          type: bool
+        fp16:
+          default: false
+          type: bool
+        gradient_checkpointing:
+          default: true
+          type: bool
+        remove_unused_columns:
+          default: false
+          type: bool
+        evaluation_strategy:
+          default: "steps"
+          type: str
+        eval_steps:
+          default: 500
+          type: int
+        logging_steps:
+          default: 100
+          type: int
+        report_to:
+          default: "tensorboard"
+          type: str
+        logging_dir:
+          default: "./logs"
+          type: str
+        save_steps:
+          default: 2000
+          type: int
+        save_total_limit:
+          default: 3
+          type: int
+        push_to_hub:
+          default: false
+          type: bool
+        hub_model_id:
+          default: null
+          type: str
+        hub_token:
+          default: null
+          type: str
